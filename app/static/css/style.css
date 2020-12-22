@@ -18,3 +18,19 @@ form {
     margin: 0 auto;
     width: 300px;
 }
+.user_acc {
+    display: flex;
+}
+.user-acc-wrapper {
+    width: 200px;
+    height: 200px;
+    margin-right: 20px;
+}
+.user-img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+.update-form {
+    margin-left: 0;
+}

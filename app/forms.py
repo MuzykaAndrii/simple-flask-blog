@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from app.models import User
+from flask_login import current_user
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[Length(min=4, max=25, 
@@ -33,3 +34,19 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class UpdateAccountForm(RegistrationForm):
+
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            result = User.query.filter_by(username=username.data).first()
+            if result:
+                raise ValidationError('That username already taken, please choose another')
+    
+    def validate_email(self, username):
+        if email.data != current_user.email:
+            result = User.query.filter_by(username=email.data).first()
+            if result:
+                raise ValidationError('That email already taken, please choose another')

@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>{{ current_user.username }}</h1>
+<div class="user_acc">
+    <div class="user-acc-wrapper">
+        <img src="{{ image_file }}" alt="" class="user-img">
+    </div>
+    <h1>Hi, {{ current_user.username }}</h1>
+</div>
+
+
+{% from "_render_field.html" import render_field %}
+
+<form class="update-form" method="POST" action="{{url_for('account')}}">
+
+ {{ form.csrf_token }}
+
+ {{ render_field(form.username) }}
+
+ {{ render_field(form.email) }}
+
+ {{render_field(form.submit)}}
+
+</form>
 
 {% endblock %}
