@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+  <li class="list-group-item list-group-item-{{cat}}">{{msg}}</li>
+</ul>
+{%endfor %}
+
+
+
+<html>
+{% block head %}
+{{ super() }}
+<style type="text/css">
+  .important {
+    color: green;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Hi, {{user.nickname}}!</h1>
+  {% for post in posts %}
+  <h1>{{post.author.nickname}}</h1> says: <b>{{post.body}}</b></p>
+  {% endfor %}
+
+{% endblock %}

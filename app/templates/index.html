@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+    <li class="list-group-item list-group-item-{{cat}}">{{msg}}</li>
+</ul>
+{%endfor %}
+
+{% block title %} 
+    {% if title %}
+        <title> {{title}} - myblog</title>
+    {% else %}
+        <title>myblog</title>
+    {% endif %}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+  <style type="text/css">
+    .important { color: green; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1 class="important">Спеціальність - {{name}}</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}
