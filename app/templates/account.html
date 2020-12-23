@@ -21,20 +21,39 @@
 </ul>
 {%endfor %}
 
-<form class="update-form" method="POST" action="{{url_for('account')}}" enctype="multipart/form-data">
 
- {{ form.csrf_token }}
+<div class="forms">
+    <form class="update-form" method="POST" action="{{url_for('account')}}" enctype="multipart/form-data">
 
- {{ render_field(form.username) }}
+        {{ form.csrf_token }}
 
- {{ render_field(form.email) }}
+        {{ render_field(form.username) }}
 
- {{ render_field(form.about_me) }}
+        {{ render_field(form.email) }}
 
- {{ render_field(form.picture) }}
+        {{ render_field(form.about_me) }}
 
- {{render_field(form.submit)}}
+        {{ render_field(form.picture) }}
 
-</form>
+        {{render_field(form.submit)}}
+
+    </form>
+
+    <form class="update-form" method="POST" action="{{url_for('account')}}">
+
+        {{ pass_form.csrf_token }}
+
+        {{ render_field(pass_form.old_password) }}
+
+        {{ render_field(pass_form.new_password) }}
+
+        {{ render_field(pass_form.confirm_password) }}
+
+        {{ render_field(pass_form.submit) }}
+
+
+    </form>
+
+</div>
 
 {% endblock %}

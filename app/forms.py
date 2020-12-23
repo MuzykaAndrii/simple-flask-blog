@@ -60,3 +60,16 @@ class UpdateAccountForm(FlaskForm):
             result = User.query.filter_by(username=email.data).first()
             if result:
                 raise ValidationError('That email already taken, please choose another')
+
+class UpdatePasswordForm(FlaskForm):
+    old_password = PasswordField('Old password', validators=[DataRequired()])
+
+    new_password = PasswordField('New password', validators=[Length(min=6, 
+                            message='Password should be bigger than 6 characters'), 
+                            DataRequired(message='This area is required')])
+
+    confirm_password = PasswordField('Repeat new Password',
+                            validators=[DataRequired(message='This area is required'), 
+                            EqualTo('new_password')])
+    
+    submit = SubmitField('Change password')
