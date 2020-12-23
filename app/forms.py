@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from app.models import User
 from flask_login import current_user
+from flask_wtf.file import FileField, FileAllowed
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[Length(min=4, max=25, 
@@ -41,6 +42,8 @@ class UpdateAccountForm(FlaskForm):
                             DataRequired(message='This area is required'), Regexp('[A-Za-z][A-Za-z0-9_.]*$', 0, 'Unexpected charachter in username')])
 
     email = StringField('Email', validators=[DataRequired(), Email()])
+
+    picture = FileField('Update Profile picture', validators=[FileAllowed(['jpg', 'png'])])
 
     submit = SubmitField('Update')
 

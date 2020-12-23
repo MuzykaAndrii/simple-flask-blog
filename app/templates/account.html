@@ -11,13 +11,15 @@
 
 {% from "_render_field.html" import render_field %}
 
-<form class="update-form" method="POST" action="{{url_for('account')}}">
+<form class="update-form" method="POST" action="{{url_for('account')}}" enctype="multipart/form-data">
 
  {{ form.csrf_token }}
 
  {{ render_field(form.username) }}
 
  {{ render_field(form.email) }}
+
+ {{ render_field(form.picture) }}
 
  {{render_field(form.submit)}}
 

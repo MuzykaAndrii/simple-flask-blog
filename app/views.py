@@ -5,6 +5,24 @@ from app.models import User, Post
 from app import bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from . import db
+import os
+import secrets
+
+def save_picture(form_picture):
+    #generate random name for pic
+    random_hex = secrets.token_hex(8)
+
+    #divide filename to name and extentions
+    f_name, f_ext, = os.path.splitext(form_picture.filename)
+
+    #connect new pic name to her extention
+    picture_fn = random_hex + f_ext
+
+    #generate new pic path according to new name and os folders position
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    form_picture.save(picture_path)
+
+    return picture_fn
 
 @app.route('/')
 @app.route('/index')
@@ -93,6 +111,11 @@ def account():
     #for pressed update button
     if form.validate_on_submit():
 
+        #if added new account image
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+
         #update user data
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -101,7 +124,7 @@ def account():
         flash('Your account has been updated', 'success')
         return redirect(url_for('account'))
 
-    #fir page loaded
+    #for page loaded
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
