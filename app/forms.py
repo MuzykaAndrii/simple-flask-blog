@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from app.models import User
 from flask_login import current_user
@@ -73,3 +73,8 @@ class UpdatePasswordForm(FlaskForm):
                             EqualTo('new_password')])
     
     submit = SubmitField('Change password')
+
+class CreatePostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=4, max=20, message='Name of post is too short/big')])
+    content = TextAreaField('Post text', validators=[DataRequired(), Length(max=400, message='Text is too big')])
+    submit = SubmitField('Create post')

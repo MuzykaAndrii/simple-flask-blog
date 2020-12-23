@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, request, flash
 from app import app
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm
 from app.models import User, Post
 from app import bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
@@ -159,3 +159,23 @@ def account():
     #loading page
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
+
+
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = CreatePostForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        creator_id = current_user.id
+
+        post = Post(title, content, creator_id)
+        post.save()
+
+        flash('Post created successfully', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('create_post.html', title='Create new post', form=form)
