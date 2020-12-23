@@ -52,6 +52,10 @@ form {
     height: 300px;
 }
 
+.post-form input[type=text] {
+    width: 700px;
+}
+
 .post {
     background-color: rgb(212, 212, 212);
     padding: 20px;

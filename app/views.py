@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, request, flash
+from flask import render_template, url_for, redirect, request, flash, abort
 from app import app
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm
 from app.models import User, Post
@@ -14,7 +14,7 @@ from PIL import Image
 def update_last_seen():
     if current_user.is_authenticated:
         current_user.last_seen = dt.now()
-        db.session.commit()
+        db.session.commit() 
 
 def save_picture(form_picture):
     #generate random name for pic
@@ -167,7 +167,7 @@ def new_post():
         flash('Post created successfully', 'success')
         return redirect(url_for('post', post_id=post.id))
 
-    return render_template('create_post.html', title='Create new post', form=form)
+    return render_template('create_post.html', title='Create new post', form=form, action='Create new post')
 
 
 @app.route('/posts', methods=['GET', 'POST'])
@@ -176,9 +176,32 @@ def posts():
     return render_template('posts.html', title='Posts', posts=posts)
 
 @app.route('/post/<int:post_id>/update')
+@login_required
 def update_post(post_id):
-    pass
+    post = Post.query.get_or_404(post_id)
+    if post.user_id != current_user.id:
+        abort(403)
+
+    form = CreatePostForm()
+
+    if form.validate_on_submit():
+        post.title = form.data.title
+        post.content = form.data.content
+        post.date_posted = dt.now()
+        post.save()
+    
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    
+    return render_template('create_post.html', title='Edit post', form=form, action='Edit post')
 
 @app.route('/post/<int:post_id>/delete')
+@login_required
 def delete_post(post_id):
-    pass
+    post = Post.query.get_or_404(post_id)
+    if post.user_id != current_user.id:
+        abort(403)
+    post.delete()
+    flash('Your post hes been deleted!', 'success')
+    return redirect(url_for('index'))

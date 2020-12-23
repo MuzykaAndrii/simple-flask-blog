@@ -46,6 +46,10 @@ class Post(db.Model):
         db.session.add(self)
         db.session.commit()
     
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+    
     def __repr__(self):
         return f"Post('{self.title}', '{self.content}', '{self.user_id}', '{self.date_posted}')"
 

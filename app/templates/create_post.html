@@ -9,6 +9,8 @@
 
 {% from "_render_field.html" import render_field %}
 
+<h1>{{ action }}</h1>
+
 <form class="post-form" method="POST" action="{{ url_for('new_post') }}">
 
     {{ form.csrf_token }}
