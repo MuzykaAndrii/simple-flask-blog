@@ -14,6 +14,9 @@ class User(UserMixin, db.Model):
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+    about_me = db.Column(db.Text, default='Hi everyone!')
+    last_seen = db.Column(db.DateTime, default=dt.utcnow)
+
 
     def __init__(self, username, email, password):
         self.username = username
