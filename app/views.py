@@ -7,6 +7,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from . import db
 import os
 import secrets
+from PIL import Image
 
 def save_picture(form_picture):
     #generate random name for pic
@@ -20,7 +21,14 @@ def save_picture(form_picture):
 
     #generate new pic path according to new name and os folders position
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-    form_picture.save(picture_path)
+    
+    #define default pic size
+    output_size = (200, 200)
+
+    #open, crop and save pic
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
 
     return picture_fn
 

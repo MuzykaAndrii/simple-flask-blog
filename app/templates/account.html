@@ -11,6 +11,12 @@
 
 {% from "_render_field.html" import render_field %}
 
+{% for cat, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+    <li class="list-group-item list-group-item-{{cat}}">{{msg}}</li>
+</ul>
+{%endfor %}
+
 <form class="update-form" method="POST" action="{{url_for('account')}}" enctype="multipart/form-data">
 
  {{ form.csrf_token }}
