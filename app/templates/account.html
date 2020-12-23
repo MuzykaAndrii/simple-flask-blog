@@ -5,7 +5,11 @@
     <div class="user-acc-wrapper">
         <img src="{{ image_file }}" alt="" class="user-img">
     </div>
-    <h1>Hi, {{ current_user.username }}</h1>
+    <div class="user_acc-inf">
+        <h1>Hi, {{ current_user.username }}</h1>
+        <h4 class="about">{{ current_user.about_me }}</h4>
+        <p class="last_seen">Last seen: {{ current_user.last_seen }}</p>
+    </div>
 </div>
 
 
@@ -24,6 +28,8 @@
  {{ render_field(form.username) }}
 
  {{ render_field(form.email) }}
+
+ {{ render_field(form.about_me) }}
 
  {{ render_field(form.picture) }}
 
