@@ -35,7 +35,12 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
-class UpdateAccountForm(RegistrationForm):
+class UpdateAccountForm(FlaskForm):
+    username = StringField('Username', validators=[Length(min=4, max=25, 
+                            message='Username length must be in range from 4 to 25 characters'),
+                            DataRequired(message='This area is required'), Regexp('[A-Za-z][A-Za-z0-9_.]*$', 0, 'Unexpected charachter in username')])
+
+    email = StringField('Email', validators=[DataRequired(), Email()])
 
     submit = SubmitField('Update')
 
@@ -45,7 +50,7 @@ class UpdateAccountForm(RegistrationForm):
             if result:
                 raise ValidationError('That username already taken, please choose another')
     
-    def validate_email(self, username):
+    def validate_email(self, email):
         if email.data != current_user.email:
             result = User.query.filter_by(username=email.data).first()
             if result:
