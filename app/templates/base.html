@@ -34,6 +34,7 @@
           <li><a href="{{url_for('login')}}"> Login</a></li>
           <li><a href="{{url_for('register')}}"> Register</a></li>
           {% else %}
+          <li><a href="{{url_for('new_post')}}">Create post</a></li>
           <li><a href="{{url_for('account')}}">Account</a></li>
           <li class="logout"><a href="{{url_for('logout')}}"> Logout</a></li>
           {% endif %}

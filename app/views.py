@@ -174,3 +174,11 @@ def new_post():
 def posts():
     posts = Post.query.all()
     return render_template('posts.html', title='Posts', posts=posts)
+
+@app.route('/post/<int:post_id>/update')
+def update_post(post_id):
+    pass
+
+@app.route('/post/<int:post_id>/delete')
+def delete_post(post_id):
+    pass

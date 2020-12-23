@@ -12,4 +12,11 @@
 <b>Created by: </b> {{ creator }}
 <p>From: {{ post.date_posted }}</p>
 
+{% if post.user_id == current_user.id %}
+
+<a href="{{ url_for('update_post', post_id=post.id) }}" class="btn btn-primary">Update post</a>
+<a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger">Delete post</a>
+
+{% endif %}
+
 {% endblock %}
