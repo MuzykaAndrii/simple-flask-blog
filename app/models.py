@@ -12,10 +12,11 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(70), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     about_me = db.Column(db.Text, default='Hi everyone!')
     last_seen = db.Column(db.DateTime, default=dt.utcnow)
+    new_string = db.Column(db.String(10))
 
 
     def __init__(self, username, email, password):

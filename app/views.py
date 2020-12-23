@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, request, flash, abort
 from app import app
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm, SearchForm
 from app.models import User, Post
 from app import bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
@@ -14,7 +14,7 @@ from PIL import Image
 def update_last_seen():
     if current_user.is_authenticated:
         current_user.last_seen = dt.now()
-        db.session.commit() 
+        db.session.commit()
 
 def save_picture(form_picture):
     #generate random name for pic
@@ -114,8 +114,9 @@ def account():
             current_user.password = bcrypt.generate_password_hash(pass_form.new_password.data).decode('utf-8')
             db.session.commit()
             flash('The password changed')
+            return render_template('account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
         else:
-            flash('Wrong old password')     
+            flash('Wrong old password')  
 
     #for pressed update button
     if form.validate_on_submit():
@@ -172,7 +173,10 @@ def new_post():
 
 @app.route('/posts', methods=['GET', 'POST'])
 def posts():
-    posts = Post.query.all()
+    # Set the pagination configuration
+    page = request.args.get('page', 1, type=int)
+
+    posts = Post.query.paginate(page=page, per_page=5)
     return render_template('posts.html', title='Posts', posts=posts)
 
 @app.route('/post/<int:post_id>/update')
@@ -204,4 +208,4 @@ def delete_post(post_id):
         abort(403)
     post.delete()
     flash('Your post hes been deleted!', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('posts'))

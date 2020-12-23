@@ -61,3 +61,14 @@ form {
     padding: 20px;
     margin-bottom: 20px;
 }
+.form-inline {
+    float: right;
+    margin-left: auto;
+}
+.form-inline input {
+    display: block;
+    margin-top: 7px;
+}
+.form-inline button {
+    margin-top: 7px;
+}

@@ -75,7 +75,10 @@ class UpdatePasswordForm(FlaskForm):
     submit = SubmitField('Change password')
 
 class CreatePostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired(), Length(min=4, max=20, message='Name of post is too short/big')])
+    title = StringField('Title', validators=[DataRequired(), Length(min=4, max=50, message='Name of post is too short/big')])
     content = TextAreaField('Post text', validators=[DataRequired(), Length(max=1000, message='Text is too big')])
     submit = SubmitField('Submit')
 
+class SearchForm(FlaskForm):
+    query = StringField('Search', validators=[DataRequired(), Length(min=4, max=20, message='Too short/long query')])
+    submit = SubmitField('Go')
