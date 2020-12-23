@@ -51,3 +51,9 @@ form {
     width: 700px;
     height: 300px;
 }
+
+.post {
+    background-color: rgb(212, 212, 212);
+    padding: 20px;
+    margin-bottom: 20px;
+}

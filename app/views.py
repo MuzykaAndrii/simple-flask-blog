@@ -97,21 +97,6 @@ def login():
             
     return render_template('login.html', form=form, title='Login')
 
-@app.route('/posts', methods=['GET', 'POST'])
-def posts():
-    user = {'nickname' : 'Andry'}
-    posts = [
-        {
-            'author' : {'nickname' : 'Lohn'},
-            'body' : "Beautifull day in Portland"
-        },
-        {
-            'author' : {'nickname' : 'Susan'},
-            'body' : "The Avengers movie was so cool"
-        }
-    ]
-    return render_template('posts.html', title='Home', user=user, posts=posts)
-
 @app.route('/logout')
 def logout():
     logout_user()
@@ -183,3 +168,9 @@ def new_post():
         return redirect(url_for('post', post_id=post.id))
 
     return render_template('create_post.html', title='Create new post', form=form)
+
+
+@app.route('/posts', methods=['GET', 'POST'])
+def posts():
+    posts = Post.query.all()
+    return render_template('posts.html', title='Posts', posts=posts)

@@ -20,9 +20,11 @@
 
 {% block content %}
 
-<h1>Hi, {{user.nickname}}!</h1>
-  {% for post in posts %}
-  <h1>{{post.author.nickname}}</h1> says: <b>{{post.body}}</b></p>
-  {% endfor %}
+{% for post in posts %}
+<div class="post">
+  <h2><a href="{{ url_for('post', post_id=post.id) }}">{{post.title}}</a></h2>
+  <p>{{ post.content | truncate(50) }}</p>
+</div>
+{% endfor %}
 
 {% endblock %}
