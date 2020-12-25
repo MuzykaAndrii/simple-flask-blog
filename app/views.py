@@ -44,6 +44,9 @@ def save_picture(form_picture):
 def index():
     return render_template('index.html', name = 'Software engeneering', title = 'PNU')
 
+
+######################## LOGIN AND REGISTER LOGIC ##########################
+####### REGISTER
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -67,6 +70,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+####### LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     #redirect if loggined
@@ -97,11 +101,14 @@ def login():
             
     return render_template('login.html', form=form, title='Login')
 
+######### LOGOUT
 @app.route('/logout')
 def logout():
     logout_user()
     flash('You have been logged out')
     return redirect(url_for('index'))
+
+###################### ACCOUNT SETTINGS ##########################
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -146,12 +153,15 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
 
+#################### POSTS CRUD LOGIC ########################
+######## GET POST
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     creator = User.query.get(post.user_id).username
     return render_template('post.html', title=post.title, post=post, creator=creator)
 
+####### CREATE POST
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -171,6 +181,7 @@ def new_post():
     return render_template('create_post.html', title='Create new post', form=form)
 
 
+######## GET POSTS
 @app.route('/posts', methods=['GET'])
 def posts():
     # Set the pagination configuration
@@ -187,6 +198,7 @@ def posts():
 
     return render_template('posts.html', title='Posts', posts=posts)
 
+###### UPDATE POST
 @app.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
@@ -211,6 +223,7 @@ def update_post(post_id):
     
     return render_template('update_post.html', title='Edit post', form=form, post_id=post.id)
 
+####### DELETE POST
 @app.route('/post/<int:post_id>/delete')
 @login_required
 def delete_post(post_id):
