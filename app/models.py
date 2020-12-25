@@ -8,7 +8,7 @@ def user_loader(user_id):
     return User.query.get(int(user_id))
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
@@ -16,8 +16,10 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy=True)
     about_me = db.Column(db.Text, default='Hi everyone!')
     last_seen = db.Column(db.DateTime, default=dt.utcnow)
-    new_string = db.Column(db.String(10))
+    admin = db.Column(db.Boolean, default=0, nullable=False)
 
+    def is_admin(self):
+        return self.admin
 
     def __init__(self, username, email, password):
         self.username = username
