@@ -171,12 +171,20 @@ def new_post():
     return render_template('create_post.html', title='Create new post', form=form, action='Create new post')
 
 
-@app.route('/posts', methods=['GET', 'POST'])
+@app.route('/posts', methods=['GET'])
 def posts():
     # Set the pagination configuration
+    POSTS_PER_PAGE = 5
     page = request.args.get('page', 1, type=int)
+    search_query = request.args.get('search_query')
 
-    posts = Post.query.paginate(page=page, per_page=5)
+    if search_query:
+        # paginate according to search query
+        posts = Post.query.filter(Post.title.contains(search_query) | Post.content.contains(search_query)).paginate(page=page, per_page=POSTS_PER_PAGE)
+    else:
+        #paginate simply
+        posts = Post.query.paginate(page=page, per_page=POSTS_PER_PAGE)
+
     return render_template('posts.html', title='Posts', posts=posts)
 
 @app.route('/post/<int:post_id>/update')

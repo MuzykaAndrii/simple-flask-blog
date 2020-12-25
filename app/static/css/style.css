@@ -61,14 +61,16 @@ form {
     padding: 20px;
     margin-bottom: 20px;
 }
-.form-inline {
+.form-block {
+    margin: 0;
+    width: 200px;
     float: right;
-    margin-left: auto;
+    margin-top: 7px;
 }
-.form-inline input {
+/* .search-button {
     display: block;
+    margin: 0;
+    width: 20px;
+    float: right;
     margin-top: 7px;
-}
-.form-inline button {
-    margin-top: 7px;
-}
+} */
