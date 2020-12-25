@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, request, flash, abort
 from app import app
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm, SearchForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm
 from app.models import User, Post
 from app import bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
@@ -168,7 +168,7 @@ def new_post():
         flash('Post created successfully', 'success')
         return redirect(url_for('post', post_id=post.id))
 
-    return render_template('create_post.html', title='Create new post', form=form, action='Create new post')
+    return render_template('create_post.html', title='Create new post', form=form)
 
 
 @app.route('/posts', methods=['GET'])
@@ -187,7 +187,7 @@ def posts():
 
     return render_template('posts.html', title='Posts', posts=posts)
 
-@app.route('/post/<int:post_id>/update')
+@app.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -197,16 +197,19 @@ def update_post(post_id):
     form = CreatePostForm()
 
     if form.validate_on_submit():
-        post.title = form.data.title
-        post.content = form.data.content
+        post.title = form.title.data
+        post.content = form.content.data
         post.date_posted = dt.now()
         post.save()
+
+        flash('Post successfully updated', 'success')
+        return redirect(url_for('post', post_id=post.id))
     
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
     
-    return render_template('create_post.html', title='Edit post', form=form, action='Edit post')
+    return render_template('update_post.html', title='Edit post', form=form, post_id=post.id)
 
 @app.route('/post/<int:post_id>/delete')
 @login_required

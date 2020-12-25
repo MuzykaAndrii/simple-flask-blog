@@ -9,9 +9,9 @@
 
 {% from "_render_field.html" import render_field %}
 
-<h1>Create new post</h1>
+<h1>Update post</h1>
 
-<form class="post-form" method="POST" action="{{ url_for('new_post') }}">
+<form class="post-form" method="POST" action="{{ url_for('update_post', post_id=post_id) }}">
 
     {{ form.csrf_token }}
 
