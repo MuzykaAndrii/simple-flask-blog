@@ -68,7 +68,7 @@ def register():
 
         flash(f'Account created for {username}!', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('auth-reg/register.html', title='Register', form=form)
 
 ####### LOGIN
 @app.route('/login', methods=['GET', 'POST'])
@@ -99,7 +99,7 @@ def login():
             else:
                 return redirect(url_for('index'))
             
-    return render_template('login.html', form=form, title='Login')
+    return render_template('auth-reg/login.html', form=form, title='Login')
 
 ######### LOGOUT
 @app.route('/logout')
@@ -121,7 +121,7 @@ def account():
             current_user.password = bcrypt.generate_password_hash(pass_form.new_password.data).decode('utf-8')
             db.session.commit()
             flash('The password changed')
-            return render_template('account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
+            return render_template('user/account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
         else:
             flash('Wrong old password')  
 
@@ -151,7 +151,7 @@ def account():
     
     #loading page
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
+    return render_template('user/account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
 
 #################### POSTS CRUD LOGIC ########################
 ######## GET POST
@@ -159,7 +159,7 @@ def account():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     creator = User.query.get(post.user_id).username
-    return render_template('post.html', title=post.title, post=post, creator=creator)
+    return render_template('post/post.html', title=post.title, post=post, creator=creator)
 
 ####### CREATE POST
 @app.route('/post/new', methods=['GET', 'POST'])
@@ -178,7 +178,7 @@ def new_post():
         flash('Post created successfully', 'success')
         return redirect(url_for('post', post_id=post.id))
 
-    return render_template('create_post.html', title='Create new post', form=form)
+    return render_template('post/create_post.html', title='Create new post', form=form)
 
 
 ######## GET POSTS
@@ -196,7 +196,7 @@ def posts():
         #paginate simply
         posts = Post.query.paginate(page=page, per_page=POSTS_PER_PAGE)
 
-    return render_template('posts.html', title='Posts', posts=posts)
+    return render_template('post/posts.html', title='Posts', posts=posts)
 
 ###### UPDATE POST
 @app.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
@@ -221,7 +221,7 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
     
-    return render_template('update_post.html', title='Edit post', form=form, post_id=post.id)
+    return render_template('post/update_post.html', title='Edit post', form=form, post_id=post.id)
 
 ####### DELETE POST
 @app.route('/post/<int:post_id>/delete')
