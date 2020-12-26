@@ -9,6 +9,7 @@ from datetime import datetime as dt
 import os
 import secrets
 from PIL import Image
+from functools import wraps
 
 @app.before_request
 def update_last_seen():
@@ -59,10 +60,9 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
         # save data to database
-        user = User(username, email, pw_hash)
+        user = User(username, email, password)
         user.save()
 
 
@@ -233,3 +233,18 @@ def delete_post(post_id):
     post.delete()
     flash('Your post hes been deleted!', 'success')
     return redirect(url_for('posts'))
+
+################## ADMIN #######################
+def admin_login_required(func):
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        if not current_user.is_admin():
+            return abort(403)
+        return func(*args, **kwargs)
+    return decorator
+
+@app.route('/admin/<any>/')
+@login_required
+@admin_login_required
+def home_admin():
+    print('HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe')

@@ -1,7 +1,8 @@
 from . import db
 from datetime import datetime as dt
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from app import login
+from app import bcrypt
 
 @login.user_loader
 def user_loader(user_id):
@@ -24,14 +25,14 @@ class User(UserMixin, db.Model):
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
-        self.password = password
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def save(self):
         db.session.add(self)
         db.session.commit()
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}')"
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
