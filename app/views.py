@@ -243,8 +243,3 @@ def admin_login_required(func):
         return func(*args, **kwargs)
     return decorator
 
-@app.route('/admin/<any>/')
-@login_required
-@admin_login_required
-def home_admin():
-    print('HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe')
