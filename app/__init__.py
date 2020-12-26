@@ -1,12 +1,14 @@
-from flask import Flask
+from flask import Flask, Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
+from flask_ckeditor import CKEditor, CKEditorField
 
 app = Flask(__name__)
 app.config.from_object('config')
+app.jinja_env.filters['markup'] = Markup
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
@@ -14,6 +16,8 @@ login = LoginManager(app)
 login.login_view = 'login'
 login.sesion_protection = 'strong'
 login.login_message_category = 'info'
+
+ckeditor = CKEditor(app)
 
 from app import views
 from app.models import *
@@ -40,6 +44,9 @@ class UserModelView(ModelView):
 
 class PostModelView(ModelView):
     form_columns = ['title', 'content', 'author']
+    form_overrides = dict(content=CKEditorField)
+    create_template = 'admin/model/create.html'
+    edit_template = 'admin/model/edit.html'
 
     def is_accessible(self):
         return current_user.is_admin()

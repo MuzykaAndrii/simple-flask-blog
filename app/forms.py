@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from app.models import User
 from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
+from flask_ckeditor import CKEditorField
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[Length(min=4, max=25, 
@@ -76,5 +77,5 @@ class UpdatePasswordForm(FlaskForm):
 
 class CreatePostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=4, max=50, message='Name of post is too short/big')])
-    content = TextAreaField('Post text', validators=[DataRequired(), Length(max=10000, message='Text is too big')])
+    content = CKEditorField('Post text', validators=[DataRequired(), Length(max=10000, message='Text is too big')])
     submit = SubmitField('Submit')

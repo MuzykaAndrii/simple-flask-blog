@@ -21,6 +21,9 @@
 
     {{render_field(form.submit)}}
 
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='content') }}
+
 </form>
 
 
