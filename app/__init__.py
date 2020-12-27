@@ -22,6 +22,9 @@ ckeditor = CKEditor(app)
 from app.posts.blueprint import posts
 app.register_blueprint(posts, url_prefix='/blog')
 
+from app.auth.blueprint import auth
+app.register_blueprint(auth, url_prefix='/auth')
+
 from app import views
 from app.models import *
 

@@ -14,7 +14,7 @@
 
 {% from "_render_field.html" import render_field %}
 
-<form method="POST" action="{{url_for('register')}}">
+<form method="POST" action="{{url_for('auth.register')}}">
 
  {{ form.csrf_token }}
 

@@ -6,6 +6,9 @@ from datetime import datetime as dt
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
+@posts.route("/")
+def index():
+    return redirect(url_for('posts.get_posts'))
 
 @posts.route("/post/<int:post_id>")
 def post(post_id):
