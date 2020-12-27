@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+    <li class="list-group-item list-group-item-{{cat}}">{{msg}}</li>
+</ul>
+{%endfor %}
+
+<h1>{{ post.title }}</h1>
+<p>{{ post.content | markup }}</p>
+<b>Created by: </b> {{ creator }}
+<p>From: {{ post.date_posted }}</p>
+
+{% if post.user_id == current_user.id %}
+
+<a href="{{ url_for('posts.update_post', post_id=post.id) }}" class="btn btn-primary">Update post</a>
+<a href="{{ url_for('posts.delete_post', post_id=post.id) }}" class="btn btn-danger">Delete post</a>
+
+{% endif %}
+
+{% endblock %}

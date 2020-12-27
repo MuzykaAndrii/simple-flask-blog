@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+    <li class="list-group-item list-group-item-{{cat}}">{{msg}}</li>
+</ul>
+{%endfor %}
+
+{% from "_render_field.html" import render_field %}
+
+<h1>Update post</h1>
+
+<form class="post-form" method="POST" action="{{ url_for('posts.update_post', post_id=post_id) }}">
+
+    {{ form.csrf_token }}
+
+    {{render_field(form.title)}}
+
+    {{render_field(form.content)}}
+
+    {{render_field(form.submit)}}
+
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='content') }}
+
+</form>
+
+
+{% endblock %}

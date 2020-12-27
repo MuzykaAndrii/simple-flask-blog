@@ -29,13 +29,13 @@
     <div class="container">
       <ul class="nav navbar-nav">
         <li><a href="{{url_for('index')}}"> Home</a></li>
-        <li><a href="{{url_for('posts')}}"> Posts</a></li>
+        <li><a href="{{url_for('posts.get_posts')}}"> Posts</a></li>
 
         {% if current_user.is_anonymous %}
         <li><a href="{{url_for('login')}}"> Login</a></li>
         <li><a href="{{url_for('register')}}"> Register</a></li>
         {% else %}
-        <li><a href="{{url_for('new_post')}}">Create post</a></li>
+        <li><a href="{{url_for('posts.new_post')}}">Create post</a></li>
         <li><a href="{{url_for('account')}}">Account</a></li>
         <li class="logout"><a href="{{url_for('logout')}}"> Logout</a></li>
         {% if current_user.is_admin() %}
@@ -45,7 +45,7 @@
         </li>
       </ul>
 
-      <form class="form-block" method="GET" action="{{ url_for('posts') }}">
+      <form class="form-block" method="GET" action="{{ url_for('posts.get_posts') }}">
         <input class="form-control" name='search_query' value="{{ request.args.get('search_query', '') }}" type="text" placeholder="Search" aria-label="Search">
         <input type="submit" style="display: none" value="go">
       </form>

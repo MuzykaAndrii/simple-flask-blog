@@ -19,10 +19,11 @@ login.login_message_category = 'info'
 
 ckeditor = CKEditor(app)
 
+from app.posts.blueprint import posts
+app.register_blueprint(posts, url_prefix='/blog')
+
 from app import views
 from app.models import *
-
-# class with identify admin method
 
 class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):

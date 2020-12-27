@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request, flash, abort
 from app import app
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdatePasswordForm, CreatePostForm
-from app.models import User, Post
+from app.models import User
 from app import bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from . import db
@@ -152,94 +152,3 @@ def account():
     #loading page
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('user/account.html', title='Account', image_file=image_file, form=form, pass_form=pass_form)
-
-#################### POSTS CRUD LOGIC ########################
-######## GET POST
-@app.route("/post/<int:post_id>")
-def post(post_id):
-    post = Post.query.get_or_404(post_id)
-    creator = User.query.get(post.user_id).username
-    return render_template('post/post.html', title=post.title, post=post, creator=creator)
-
-####### CREATE POST
-@app.route('/post/new', methods=['GET', 'POST'])
-@login_required
-def new_post():
-    form = CreatePostForm()
-
-    if form.validate_on_submit():
-        title = form.title.data
-        content = form.content.data
-        creator_id = current_user.id
-
-        post = Post(title, content, creator_id)
-        post.save()
-
-        flash('Post created successfully', 'success')
-        return redirect(url_for('post', post_id=post.id))
-
-    return render_template('post/create_post.html', title='Create new post', form=form)
-
-
-######## GET POSTS
-@app.route('/posts', methods=['GET'])
-def posts():
-    # Set the pagination configuration
-    POSTS_PER_PAGE = 5
-    page = request.args.get('page', 1, type=int)
-    search_query = request.args.get('search_query')
-
-    if search_query:
-        # paginate according to search query
-        posts = Post.query.filter(Post.title.contains(search_query) | Post.content.contains(search_query)).paginate(page=page, per_page=POSTS_PER_PAGE)
-    else:
-        #paginate simply
-        posts = Post.query.paginate(page=page, per_page=POSTS_PER_PAGE)
-
-    return render_template('post/posts.html', title='Posts', posts=posts)
-
-###### UPDATE POST
-@app.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
-@login_required
-def update_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.user_id != current_user.id:
-        abort(403)
-
-    form = CreatePostForm()
-
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-        post.date_posted = dt.now()
-        post.save()
-
-        flash('Post successfully updated', 'success')
-        return redirect(url_for('post', post_id=post.id))
-    
-    elif request.method == 'GET':
-        form.title.data = post.title
-        form.content.data = post.content
-    
-    return render_template('post/update_post.html', title='Edit post', form=form, post_id=post.id)
-
-####### DELETE POST
-@app.route('/post/<int:post_id>/delete')
-@login_required
-def delete_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.user_id != current_user.id:
-        abort(403)
-    post.delete()
-    flash('Your post hes been deleted!', 'success')
-    return redirect(url_for('posts'))
-
-################## ADMIN #######################
-def admin_login_required(func):
-    @wraps(func)
-    def decorator(*args, **kwargs):
-        if not current_user.is_admin():
-            return abort(403)
-        return func(*args, **kwargs)
-    return decorator
-
