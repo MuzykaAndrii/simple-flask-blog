@@ -5,11 +5,13 @@ from flask_login import LoginManager
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_ckeditor import CKEditor, CKEditorField
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 app.config.from_object('config')
 app.jinja_env.filters['markup'] = Markup
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
 login = LoginManager(app)

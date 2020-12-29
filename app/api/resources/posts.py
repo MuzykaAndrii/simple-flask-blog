@@ -1,15 +1,15 @@
 from flask_restful import Resource, reqparse
-from app.models import Post
+from app.models import Post, PostSchema
 from flask import jsonify
 
 parser = reqparse.RequestParser()
 
 class PostApi(Resource):
     def get(self, post_id):
-        
         post = Post.query.filter_by(id=post_id).first()
         if post:
-            return jsonify({'post_id' : post.id, 'post_title' : post.title, 'post_content' : post.content})
+            post_schema = PostSchema(many=False)
+            return post_schema.jsonify(post)
         else:
             return 404
     
@@ -24,9 +24,10 @@ class PostApi(Resource):
         return 200
     
     def post(self):
-        posts = User.query.all()
+        posts = Post.query.all()
+        post_schema = PostSchema(many=True)
         
-        return jsonify(posts) # need serialize
+        return post_schema.jsonify(posts)
     
     def delete(self, post_id):
         post = Post.query.get(post_id)

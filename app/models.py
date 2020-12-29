@@ -3,6 +3,7 @@ from datetime import datetime as dt
 from flask_login import UserMixin, current_user
 from app import login
 from app import bcrypt
+from app import ma
 
 @login.user_loader
 def user_loader(user_id):
@@ -60,4 +61,7 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.content}', '{self.user_id}', '{self.date_posted}')"
 
+class PostSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'title', 'date_posted', 'content', 'user_id')
 
