@@ -9,4 +9,4 @@ api = Api(api_bp)
 def api_redirect():
     return redirect(url_for('index'))
 
-api.add_resource(PostApi, '/post/<int:post_id>')
+api.add_resource(PostApi, '/post/<int:post_id>', '/post', '/post/<int:post_id>/delete', '/posts')
