@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, flash, redirect
 from app.forms import RegistrationForm, LoginForm
 from app.models import User
-from app import bcrypt
 from flask_login import current_user, login_user, logout_user
 
 auth = Blueprint('auth', __name__, template_folder='templates')
@@ -50,7 +49,7 @@ def login():
 
         #check if user exist and password hash is equals
         result = User.query.filter_by(email=email).first()
-        if result is None or not bcrypt.check_password_hash(result.password, password):
+        if result is None or not result.check_password(password):
             flash('Login unsuccessfull. Please check username and password', category='warning')
             return redirect(url_for('auth.login'))
         else:
