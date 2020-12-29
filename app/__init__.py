@@ -25,6 +25,9 @@ app.register_blueprint(posts, url_prefix='/blog')
 from app.auth.blueprint import auth
 app.register_blueprint(auth, url_prefix='/auth')
 
+from app.api.blueprint import api_bp
+app.register_blueprint(api_bp, url_prefix='/api')
+
 from app import views
 from app.models import *
 
