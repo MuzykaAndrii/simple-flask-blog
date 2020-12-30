@@ -5,6 +5,7 @@ from app import login
 from app import bcrypt
 from app import ma
 
+
 @login.user_loader
 def user_loader(user_id):
     return User.query.get(int(user_id))

@@ -6,6 +6,7 @@ from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_ckeditor import CKEditor, CKEditorField
 from flask_marshmallow import Marshmallow
+from wtforms import PasswordField
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -39,14 +40,25 @@ class MyAdminIndexView(AdminIndexView):
 
 
 class UserModelView(ModelView):
-    form_create_rules = ['username', 'email', 'password', 'about_me', 'admin']
 
-    form_edit_rules  = ['username', 'email', 'about_me', 'admin']
+    #exclude pass field and other
+    form_excluded_columns = ('password', 'posts', 'image_file', 'last_seen')
+
+    #add additionally pass field
+    form_extra_fields = {
+        'password2': PasswordField('Password')
+    }
+
+    #IMPORTANT! 2 rules under just rearrange fields in forms, not exclude him
+    form_create_rules = ['username', 'email', 'password2', 'about_me', 'admin']
+    form_edit_rules  = ['username', 'email', 'password2', 'about_me', 'admin']
 
 
     def on_model_change(self, form, model, is_created):
-        model.hash_password(form.password.data)
-        return super(BaseModelView, self).on_model_change(form, model, is_created)
+        if form.password2.data:
+            model.hash_password(form.password2.data)
+        return super(UserModelView, self).on_model_change(form, model, is_created)
+    
     
     def is_accessible(self):
         return current_user.is_admin()
